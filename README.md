@@ -2,19 +2,22 @@
 
 This project is for learning how to use webview in Flutter App.
 
-### Webview Package
-
+### initialize Webview
 ```dart
-dependencies:
-  webview_flutter: ^0.3.22+1
-```
+late WebViewController _controller;
 
-```dart
-$ flutter packages get
-```
-
-```dart
-import 'package:webview_flutter/webview_flutter.dart';
+void _initializeWebview() {
+  late final PlatformWebViewControllerCreationParams params;
+  params = const PlatformWebViewControllerCreationParams();
+  final controller = WebViewController.fromPlatformCreationParams(params);
+  controller
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setBackgroundColor(const Color(0x00000000))
+    ..setNavigationDelegate(NavigationDelegate(onPageFinished: (url) => setState(() => _loader = false)))
+    ..addJavaScriptChannel('Toaster', onMessageReceived: (message) {})
+    ..loadRequest(Uri.parse(widget.url));
+  setState(() => _controller = controller);
+}
 ```
 
 ### Webview Widget
@@ -29,4 +32,4 @@ WebView(
 ```
 
 ## Screenshots
-<img src="screenshot/one.jpg" width="300">
+<img src="screenshot/one.png">
